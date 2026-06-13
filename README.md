@@ -84,7 +84,7 @@ Mean demand aggregated at multiple levels — computed from training data only:
 | `geo4_demand_mean` | Mean demand per 4-char geohash prefix |
 | `geo5_demand_mean` | Mean demand per 5-char geohash prefix |
 | `ts_demand_mean` | Mean demand per time slot (all locations) |
-| `geo_ts_mean` ⭐ | Mean demand per **(geohash × time_slot)** pair — most predictive feature |
+| `geo_ts_mean` | Mean demand per **(geohash × time_slot)** pair — most predictive feature |
 
 > `geo_ts_mean` captures recurring patterns like *"this highway junction always spikes at 8:00 AM"* — the single most informative feature in the model.
 
@@ -155,5 +155,3 @@ geo5_demand_mean, geo_ts_mean
 - **Cyclical time encoding is essential.** Without sin/cos encoding, the model treats time linearly — breaking the continuity between 23:45 and 00:00.
 
 ---
-
-*Submitted for Gridlock Hackathon 2.0 — Flipkart × HackerEarth*
