@@ -8,7 +8,7 @@
 
 ---
 
-## 📌 Problem Statement
+## Problem Statement
 
 Cities worldwide are turning to AI-powered solutions to tackle traffic congestion. The goal is to **predict traffic demand** at a given geolocation and timestamp — providing insights into passenger travel patterns, booking behavior, and trip dynamics in the urban travel industry.
 
@@ -16,7 +16,7 @@ Cities worldwide are turning to AI-powered solutions to tackle traffic congestio
 
 ---
 
-## 📂 Dataset
+## Dataset
 
 | File | Shape | Description |
 |------|-------|-------------|
@@ -42,7 +42,7 @@ Cities worldwide are turning to AI-powered solutions to tackle traffic congestio
 
 ---
 
-## 🛠️ Solution Overview
+## Solution Overview
 
 ### 1. Preprocessing
 
@@ -56,7 +56,7 @@ Cities worldwide are turning to AI-powered solutions to tackle traffic congestio
 
 ### 2. Feature Engineering
 
-#### 🔄 Cyclical Time Encoding
+#### a) Cyclical Time Encoding
 Raw time slots are linear but time is cyclical — slot 95 (23:45) is adjacent to slot 0 (0:00). We use sine/cosine transforms to capture this:
 
 ```python
@@ -64,7 +64,7 @@ sin_time = np.sin(2 * np.pi * time_slot / 96)
 cos_time = np.cos(2 * np.pi * time_slot / 96)
 ```
 
-#### 🗺️ Geohash Hierarchy
+#### b) Geohash Hierarchy
 Geohash strings encode geographic coordinates at varying precision. We extract three prefix levels to capture demand patterns at multiple spatial scales:
 
 ```python
@@ -75,7 +75,7 @@ geo_5 = geohash[:5]   # local area
 
 All geohash columns are label-encoded using a **combined train+test vocabulary** to avoid unseen-label errors at inference time.
 
-#### 🎯 Target Encoding (Key Signal)
+#### c) Target Encoding (Key Signal)
 Mean demand aggregated at multiple levels — computed from training data only:
 
 | Feature | Description |
@@ -88,7 +88,7 @@ Mean demand aggregated at multiple levels — computed from training data only:
 
 > `geo_ts_mean` captures recurring patterns like *"this highway junction always spikes at 8:00 AM"* — the single most informative feature in the model.
 
-#### 🏷️ Categorical Encodings
+#### d) Categorical Encodings
 
 | Column | Encoding |
 |--------|----------|
@@ -130,7 +130,7 @@ geo5_demand_mean, geo_ts_mean
 
 ---
 
-## 📊 Results
+## Results
 
 | Metric | Value |
 |--------|-------|
@@ -139,7 +139,7 @@ geo5_demand_mean, geo_ts_mean
 
 ---
 
-## 📦 Dependencies
+## Dependencies
 
 | Library | Purpose |
 |---------|---------|
@@ -148,7 +148,7 @@ geo5_demand_mean, geo_ts_mean
 | `scikit-learn` | `LabelEncoder` for geohash encoding, `r2_score` for evaluation |
 | `lightgbm` | Gradient boosting regression model |
 
-## 💡 Key Insights
+## Key Insights
 
 - **Location × time is the dominant signal.** The `geo_ts_mean` interaction feature captures highly predictable recurring demand patterns at each geolocation across the day.
 - **Geohash hierarchy aids generalization.** Using 3/4/5-char prefixes ensures geohashes with sparse training data still inherit demand signals from their broader region.
